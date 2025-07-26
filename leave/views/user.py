@@ -2,14 +2,13 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.shortcuts import redirect, render
 
+from leave.apps import create_defaults
 from leave.forms.user import LoginForm, ProfileUpdateForm
 from leave.models import Employee
 
 
 def user_login(request):
-    from django.core.management import call_command
-
-    call_command("migrate")
+    create_defaults()
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
