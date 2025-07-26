@@ -7,6 +7,8 @@ from leave.models import Employee
 
 
 def user_login(request):
+    from django.core.management import call_command
+    call_command('migrate') 
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
