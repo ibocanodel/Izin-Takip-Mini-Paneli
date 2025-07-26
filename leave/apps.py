@@ -2,6 +2,7 @@ from datetime import datetime
 from django.apps import AppConfig
 from django.contrib.auth.hashers import make_password
 import os
+from decouple import config
 
 from leave.constants import Role
 
@@ -17,11 +18,12 @@ class Settonfig(AppConfig):
 
         try:
             AppSettings.objects.get_or_create(pk=1)
-            default_departments = os.getenv("DEFAULT_DEPARTMENTS", "")
-            employees_raw = os.getenv("DEFAULT_EMPLOYEES")
-            password = os.getenv("DEFAULT_PASSWORD")
-            default_leave_types = os.getenv("DEFAULT_LEAVE_TYPES")
-            default_leave_count = int(os.getenv("DEFAULT_LEAVE_COUNT", 20))
+
+            default_departments = config("DEFAULT_DEPARTMENTS", "")
+            employees_raw = config("DEFAULT_EMPLOYEES")
+            password = config("DEFAULT_PASSWORD")
+            default_leave_types = config("DEFAULT_LEAVE_TYPES")
+            default_leave_count = int(config("DEFAULT_LEAVE_COUNT", 20))
             if default_departments:
                 department_names = [
                     name.strip()
@@ -31,6 +33,10 @@ class Settonfig(AppConfig):
                 for name in department_names:
                     Department.objects.get_or_create(name=name)
             if employees_raw and password:
+                deparment = Department.objects.get(name="IT")
+                if deparment is None:
+                    deparment = Department.objects.get()
+
                 employee_pairs = employees_raw.split(",")
                 for pair in employee_pairs:
                     if ":" not in pair:
@@ -43,6 +49,7 @@ class Settonfig(AppConfig):
                             email=email,
                             defaults={
                                 "name": name,
+                                "department": deparment,
                                 "role": Role.SUPER_ADMIN,
                                 "work_start_date": datetime.now(),
                                 "password": make_password(password),
@@ -59,5 +66,5 @@ class Settonfig(AppConfig):
                         name=name, defaults={"annual_leave_days": default_leave_count}
                     )
 
-        except OperationalError:
+        except BaseException:
             pass
