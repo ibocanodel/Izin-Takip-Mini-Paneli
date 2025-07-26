@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block title %}İzin Talebi{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">İzin Talep Formu</div>
+    {% if request.method == "POST" and messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="card-body">
+        <form id="leaveform" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="force_submit" id="force_submit" value="false">
+            <div class="mb-3">
+                <label for="leave_type" class="form-label">İzin Türü *</label>
+                <select class="form-select" name="leave_type" id="leave_type" required>
+                    {% for t in leave_types %}
+                        <option value="{{ t.id }}">{{ t.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        
+            <div class="mb-3">
+                <label for="start_date" class="form-label">Başlangıç Tarihi *</label>
+                <input type="date" class="form-control" name="start_date" id="start_date" required>
+            </div>
+        
+            <div class="mb-3">
+                <label for="end_date" class="form-label">Bitiş Tarihi *</label>
+                <input type="date" class="form-control" name="end_date" id="end_date" required>
+            </div>
+        
+            <div class="mb-3">
+                <label for="business_days" class="form-label">İş Günü Sayısı</label>
+                <input type="number" class="form-control" name="business_days" id="business_days" min="1" readonly style="background-color: #e9ecef; pointer-events: none;">
+            </div>
+        
+            <button type="submit" class="btn btn-primary">Gönder</button>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmModalLabel">Onay Gerekli</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+      </div>
+      <div class="modal-body">
+        <p id="confirmModalMessage"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+        <button type="button" class="btn btn-primary" id="confirmContinueBtn">Devam Et</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("leaveform");
+  const startDateInput = document.getElementById("start_date");
+  const endDateInput = document.getElementById("end_date");
+  const confirmModal = new bootstrap.Modal(document.getElementById("confirmModal"));
+  const confirmMessage = document.getElementById("confirmModalMessage");
+  const confirmBtn = document.getElementById("confirmContinueBtn");
+
+  let allowSubmit = false;
+
+  const calculateBusinessDays = () => {
+    const startDate = new Date(startDateInput.value);
+    const endDate = new Date(endDateInput.value);
+    if (!startDate || !endDate || isNaN(startDate) || isNaN(endDate)) return;
+    let count = 0;
+    let current = new Date(startDate);
+    const workingDays = {{ work_days|safe }};
+    while (current <= endDate) {
+      if (workingDays.includes(current.getDay())) count++;
+      current.setDate(current.getDate() + 1);
+    }
+    document.getElementById("business_days").value = count;
+  };
+
+  startDateInput.addEventListener("change", function () {
+    const start = new Date(startDateInput.value);
+    const end = new Date(endDateInput.value);
+    if (!endDateInput.value || end < start) {
+      endDateInput.value = startDateInput.value;
+      endDateInput.dispatchEvent(new Event("change"));
+    }
+    calculateBusinessDays();
+  });
+
+  endDateInput.addEventListener("change", calculateBusinessDays);
+
+  form.addEventListener("submit", function (e) {
+    if (allowSubmit) return;
+
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    fetch("", {
+      method: "POST",
+      body: formData,
+      headers: {
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        location.href = data.redirect_url || window.location.href;
+      } else if (data.input_required) {
+        confirmMessage.textContent = data.error || "Onay gerektiren bir durum oluştu.";
+        confirmModal.show();
+      } else {
+        alert(data.error || "İşlem başarısız oldu.");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Bir hata oluştu.");
+    });
+  });
+
+  confirmBtn.addEventListener("click", function () {
+    allowSubmit = true;
+    document.getElementById("force_submit").value = "true";
+    confirmModal.hide();
+    form.submit();
+  });
+});
+</script>
+{% endblock %}

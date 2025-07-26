@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Departman</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Kaydet</button>
+    <a href="{% url 'department_list' %}" class="btn btn-secondary">İptal</a>
+</form>
+<a href="{% url 'department_list' %}">← Geri dön</a>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Çalışanlar{% endblock %}
+
+{% block content %}
+<h3>Çalışan Listesi</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Ad</th>
+            <th>Email</th>
+            <th>Departman</th>
+            <th>Rol</th>
+            <th>İşe Başlama</th>
+            <th>Aksiyonlar</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for e in employees %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ e.name }}</td>
+            <td>{{ e.email }}</td>
+            <td>{{ e.department.name }}</td>
+            <td>{{ e.get_role_display }}</td>
+            <td>{{ e.work_start_date }}</td>
+            <td>
+                <a href="{% url 'update_employee' e.id %}" class="btn btn-sm btn-warning">Düzenle</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'create_employee' %}" class="btn btn-primary">Yeni Çalışan Ekle</a>
+{% endblock %}

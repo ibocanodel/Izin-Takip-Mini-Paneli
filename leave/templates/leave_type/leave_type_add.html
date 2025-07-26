@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}İzin Talebi{% endblock %}
+
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+  
+    <div class="mb-3">
+      <label for="id_name" class="form-label">İzin Türü Adı *</label>
+      <input type="text" name="name" class="form-control" id="id_name" value="{{ form.name.value|default:'' }}" required>
+    </div>
+  
+    <div class="mb-3">
+      <label for="id_annual_leave_days" class="form-label">Yıllık İzin Günü Sayısı *</label>
+      <input type="number" name="annual_leave_days" class="form-control" id="id_annual_leave_days" value="{{ form.annual_leave_days.value|default:'' }}" required min="0">
+    </div>
+  
+    <div class="form-check mb-3">
+      <input type="checkbox" name="count_on_total_days" class="form-check-input" id="id_count_on_total_days" {% if form.count_on_total_days.value %}checked{% endif %}>
+      <label for="id_count_on_total_days" class="form-check-label">Toplam Gün Hesabına Dahil Edilsin</label>
+    </div>
+  
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+  </form>
+
+  {% endblock %}
+  

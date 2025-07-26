@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Tüm izinler{% endblock %}
+
+{% block content %}
+<h3>Tüm İzinler</h3>
+
+<form method="get" class="row g-3 mb-4">
+    <div class="col-md-3">
+        <label>Çalışan</label>
+        <select name="employee" class="form-select">
+            <option value="">Hepsi</option>
+            {% for e in employees %}
+                <option value="{{ e.id }}" {% if filters.employee_id == e.id|stringformat:"s" %}selected{% endif %}>{{ e.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <label>Departman</label>
+        <select name="department" class="form-select">
+            <option value="">Hepsi</option>
+            {% for d in departments %}
+                <option value="{{ d.id }}" {% if filters.department_id == d.id|stringformat:"s" %}selected{% endif %}>{{ d.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <label>Başlangıç</label>
+        <input type="date" name="start_date" class="form-control"
+       value="{{ filters.start_date }}">
+    </div>
+
+    <div class="col-md-2">
+        <label>Bitiş</label>
+        <input type="date" name="end_date" class="form-control" value="{{ filters.end_date }}">
+    </div>
+
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Filtrele</button>
+    </div>
+</form>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Çalışan</th>
+            <th>Departman</th>
+            <th>İzin Türü</th>
+            <th>Başlangıç</th>
+            <th>Bitiş</th>
+            <th>İş Günleri</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for leave in leaves %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ leave.employee.name }}</td>
+            <td>{{ leave.employee.department.name }}</td>
+            <td>{{ leave.leave_type.name }}</td>
+            <td>{{ leave.start_date }}</td>
+            <td>{{ leave.end_date }}</td>
+            <td>{{ leave.business_days }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="text-center">Kayıt bulunamadı.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

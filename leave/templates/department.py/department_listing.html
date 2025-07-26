@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Departmanlar{% endblock %}
+
+{% block content %}
+<h3>Departmanlar</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Ad</th>
+            <th>İşlemler</th> 
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in types %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ t.name }}</td>
+            <td>
+                <a href="{% url 'edit_department' t.id %}" class="btn btn-sm btn-warning">Düzenle</a>
+                <button class="btn btn-sm btn-danger"
+                        data-id="{{ t.id }}"
+                        data-name="{{ t.name }}"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteModal">
+                    Sil
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'add_department' %}" class="btn btn-primary">Yeni Tür Ekle</a>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Departmanı Sil</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong id="modal-dept-name"></strong> adlı departmanı silmek istiyor musunuz?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+        <button type="button" class="btn btn-danger" id="confirm-delete-btn">Evet, Sil</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  let deleteId = null;
+
+  document.querySelectorAll('[data-bs-toggle="modal"]').forEach(btn => {
+    btn.addEventListener("click", function () {
+      deleteId = this.getAttribute("data-id");
+      const name = this.getAttribute("data-name");
+      document.getElementById("modal-dept-name").textContent = name;
+    });
+  });
+
+  document.getElementById("confirm-delete-btn").addEventListener("click", function () {
+    fetch(`/departman/${deleteId}/sil/`, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": "{{ csrf_token }}",
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      } else {
+        alert(data.error || "Silme işlemi başarısız oldu.");
+      }
+    });
+  });
+</script>
+{% endblock %}

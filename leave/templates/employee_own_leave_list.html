@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}İzin Listesi{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>İzin Listesi</h2>
+    <form method="get" class="d-flex">
+        <select name="year" class="form-select me-2" onchange="this.form.submit()">
+            {% for year in years %}
+                <option value="{{ year }}" {% if year|stringformat:"s" == selected_year %}selected{% endif %}>{{ year }}</option>
+            {% endfor %}
+        </select>
+        <noscript><button type="submit" class="btn btn-primary">Filtrele</button></noscript>
+    </form>
+</div>
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Başlangıç Tarihi</th>
+            <th>Bitiş Tarihi</th>
+            <th>İzin Türü</th>
+            <th>İş Günleri</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for leave in leaves %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ leave.start_date }}</td>
+            <td>{{ leave.end_date }}</td>
+            <td>{{ leave.leave_type.name }}</td>
+            <td>{{ leave.business_days }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">Seçilen yıl için kayıt bulunamadı.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

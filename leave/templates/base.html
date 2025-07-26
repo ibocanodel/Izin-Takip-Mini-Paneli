@@ -1,0 +1,78 @@
+{% load role_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Panel{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 🔹 NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">💼 Yönetim Paneli</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"></li>
+                    <a class="nav-link" href="{% url 'leave_request' %}">İzin al</a>
+                    </li>
+                    <li class="nav-item"></li>
+                    <a class="nav-link" href="{% url 'leave_list' %}">Kendi izinlerim</a>
+                    </li>
+                    {% if current_employee|can_access:"leave_types" %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'all_leaves' %}">Tüm çalışan izinleri</a>
+                    </li>
+                    {% endif %}
+                    {% if current_employee|can_access:"employees" %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'employees' %}">Çalışanlar</a>
+                    </li>
+                    {% endif %}
+                    {% if current_employee|can_access:"admin_tasks" %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            🛠️ Admin Tasks
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% if current_employee|can_access:"all_leaves" %}
+                            <li><a class="dropdown-item" href="{% url 'department_list' %}">Departmanlar</a></li>
+                            {% endif %}
+                            {% if current_employee|can_access:"leave_types" %}
+                            <li><a class="dropdown-item" href="{% url 'leave_type_list' %}">İzin Tipleri</a></li>
+                            {% endif %}
+                            {% if current_employee|can_access:"settings" %}
+                            <li><a class="dropdown-item" href="{% url 'update_settings' %}">Uygulama Ayarları</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'my_profile' %}">👤 Profilim</a>
+                      </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Çıkış</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+  
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+
