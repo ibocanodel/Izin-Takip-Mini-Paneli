@@ -62,7 +62,10 @@ urlpatterns = [
         "calisan/<int:pk>/duzenle/", employees.update_employee, name="update_employee"
     ),
 ]
+
+
 def custom_404_view(request, exception):
     return render(request, "page_not_found.html", status=404)
+
 
 handler404 = "leave_panel.urls.custom_404_view"

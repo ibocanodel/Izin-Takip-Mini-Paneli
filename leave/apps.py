@@ -1,8 +1,9 @@
+import os
 from datetime import datetime
+
+from decouple import config
 from django.apps import AppConfig
 from django.contrib.auth.hashers import make_password
-import os
-from decouple import config
 
 from leave.constants import Role
 
@@ -14,7 +15,7 @@ class Settonfig(AppConfig):
     def ready(self):
         from django.db.utils import OperationalError
 
-        from .models import AppSettings, Employee, Department, LeaveType
+        from .models import AppSettings, Department, Employee, LeaveType
 
         try:
             AppSettings.objects.get_or_create(pk=1)

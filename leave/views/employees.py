@@ -1,13 +1,14 @@
 from urllib.parse import urlencode
+
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 
 from leave.decorators import role_required
 from leave.forms.user import CreateEmployeeForm, UpdateEmployeeForm
 from leave.models import AppSettings, Employee
 from leave.permissions import Page
-from django.core.paginator import Paginator
 
 PAGE_ENUM = Page.EMPLOYEES
 
@@ -42,7 +43,7 @@ def employee_list(request):
     page_size = request.GET.get("page_size", 10)
     paginator = Paginator(employees, page_size)
     page_obj = paginator.get_page(page_number)
-    page_size_options = [1,5, 10, 20, 50, 100]
+    page_size_options = [1, 5, 10, 20, 50, 100]
     query_params.pop("page", None)
 
     try:
@@ -66,7 +67,6 @@ def employee_list(request):
 def update_employee(request, pk):
 
     employee = get_object_or_404(Employee, pk=pk, is_deleted=False)
-    print(employee.work_start_date)
     if request.method == "POST":
         form = UpdateEmployeeForm(request.POST, instance=employee)
         if form.is_valid():

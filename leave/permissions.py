@@ -1,6 +1,6 @@
 from enum import Enum
 
-from leave.constants import Role  # Role.ADMIN, Role.SUPER_ADMIN vs
+from leave.constants import Role
 
 default_access_permissions = [Role.NORMAL_EMPLOYEE]
 

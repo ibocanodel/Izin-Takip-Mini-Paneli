@@ -45,7 +45,6 @@ def edit_leave_type(request, pk):
 
 @role_required(PAGE_ENUM)
 def delete_leave_type(request, pk):
-    print("test")
     if (
         request.method == "POST"
         and request.headers.get("x-requested-with") == "XMLHttpRequest"

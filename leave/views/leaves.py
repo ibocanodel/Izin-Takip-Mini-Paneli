@@ -2,6 +2,7 @@ from datetime import datetime
 from urllib.parse import urlencode
 
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.db.models.functions import ExtractYear
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
@@ -10,7 +11,6 @@ from leave.decorators import role_required
 from leave.forms.leave import LeaveForm
 from leave.models import AppSettings, Department, Employee, Leave, LeaveType
 from leave.permissions import Page
-from django.core.paginator import Paginator
 
 ALL_LEAVES_LIST_PAGE_ENUM = Page.ALL_LEAVES
 
@@ -35,7 +35,6 @@ def leave_request(request):
         else:
             all_errors = []
             none_errors = []
-        print(f"tt {form.errors}")
         for field, errors in form.errors.items():
             if field == "__all__":
                 for error in errors:
