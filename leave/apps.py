@@ -1,7 +1,6 @@
 import os
 from datetime import datetime
 
-from decouple import config
 from django.apps import AppConfig
 from django.contrib.auth.hashers import make_password
 
@@ -20,11 +19,11 @@ class Settonfig(AppConfig):
         try:
             AppSettings.objects.get_or_create(pk=1)
 
-            default_departments = config("DEFAULT_DEPARTMENTS", "")
-            employees_raw = config("DEFAULT_EMPLOYEES")
-            password = config("DEFAULT_PASSWORD")
-            default_leave_types = config("DEFAULT_LEAVE_TYPES")
-            default_leave_count = int(config("DEFAULT_LEAVE_COUNT", 20))
+            default_departments = os.getenv("DEFAULT_DEPARTMENTS", "")
+            employees_raw = os.getenv("DEFAULT_EMPLOYEES")
+            password = os.getenv("DEFAULT_PASSWORD")
+            default_leave_types = os.getenv("DEFAULT_LEAVE_TYPES")
+            default_leave_count = int(os.getenv("DEFAULT_LEAVE_COUNT", 20))
             if default_departments:
                 department_names = [
                     name.strip()
