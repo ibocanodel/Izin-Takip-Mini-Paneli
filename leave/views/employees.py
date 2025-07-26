@@ -1,11 +1,11 @@
 
 
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404, redirect, render
+
 from leave.decorators import role_required
 from leave.forms.user import CreateEmployeeForm, UpdateEmployeeForm
-from django.contrib.auth.hashers import make_password, check_password
-from django.contrib import messages
-
 from leave.models import AppSettings, Employee
 from leave.permissions import Page
 

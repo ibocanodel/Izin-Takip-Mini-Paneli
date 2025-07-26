@@ -1,7 +1,4 @@
 from django.apps import AppConfig
-import os
-from dotenv import load_dotenv
-
 
 
 class Settonfig(AppConfig):
@@ -9,8 +6,9 @@ class Settonfig(AppConfig):
     name = 'leave'
 
     def ready(self):
-        from .models import AppSettings
         from django.db.utils import OperationalError
+
+        from .models import AppSettings
         try:
             AppSettings.objects.get_or_create(pk=1)
         except OperationalError:

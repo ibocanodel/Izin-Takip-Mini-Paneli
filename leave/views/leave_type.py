@@ -1,12 +1,12 @@
 from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+
 from leave.constants import Role
 from leave.decorators import role_required
 from leave.forms.leave_type import LeaveTypeForm
-from leave.models import Department, Leave, LeaveType
-from leave.utils import user_has_roles
+from leave.models import Leave, LeaveType
 from leave.permissions import Page
-
+from leave.utils import user_has_roles
 
 PAGE_ENUM = Page.LEAVE_TYPES
 

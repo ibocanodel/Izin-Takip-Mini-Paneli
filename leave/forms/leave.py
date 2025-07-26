@@ -1,12 +1,9 @@
+from datetime import date, timedelta
+
+from dateutil.relativedelta import relativedelta
 from django import forms
 
-from leave.models import AppSettings, Department, Employee, Leave, LeaveType
-from django.contrib.auth.hashers import make_password, check_password
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
-from datetime import date, timedelta
-from dateutil.relativedelta import relativedelta
-
+from leave.models import AppSettings, Employee, Leave, LeaveType
 
 
 class LeaveForm(forms.ModelForm):

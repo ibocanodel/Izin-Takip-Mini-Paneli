@@ -1,7 +1,6 @@
 from django import template
 
-from leave.constants import Role
-from leave.permissions import PAGE_ROLE_ACCESS,default_access_permissions
+from leave.permissions import PAGE_ROLE_ACCESS, default_access_permissions
 
 register = template.Library()
 

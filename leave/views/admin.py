@@ -1,7 +1,8 @@
+from django.contrib import messages
 from django.shortcuts import redirect, render
+
 from leave.forms.admin import AppSettingsForm
 from leave.models import AppSettings
-from django.contrib import messages
 
 
 def update_settings(request):

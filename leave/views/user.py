@@ -1,8 +1,9 @@
+from django.contrib import messages
+from django.contrib.auth import logout
 from django.shortcuts import redirect, render
+
 from leave.forms.user import LoginForm, ProfileUpdateForm
 from leave.models import Employee
-from django.contrib.auth import login, logout
-from django.contrib import messages
 
 
 def user_login(request):

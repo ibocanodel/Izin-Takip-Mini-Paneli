@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Employee,Department, LeaveType
+
+from .models import Department, Employee, LeaveType
+
 
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):

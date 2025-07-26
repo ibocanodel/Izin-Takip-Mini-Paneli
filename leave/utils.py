@@ -1,7 +1,6 @@
 from typing import List
 
 from leave.constants import Role
-from leave.permissions import Page
 
 
 def user_has_roles(request, roles : List[Role]):

@@ -1,17 +1,16 @@
 
 
-from typing import NamedTuple
-from django.forms import ValidationError
+from datetime import datetime
+
+from django.contrib import messages
+from django.db.models.functions import ExtractYear
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
+
 from leave.decorators import role_required
 from leave.forms.leave import LeaveForm
 from leave.models import AppSettings, Department, Employee, Leave, LeaveType
 from leave.permissions import Page
-from django.db.models.functions import ExtractYear
-from datetime import datetime
-from django.contrib import messages
-
 
 ALL_LEAVES_LIST_PAGE_ENUM = Page.ALL_LEAVES
 

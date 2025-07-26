@@ -1,8 +1,11 @@
 
-from django.http import HttpResponseForbidden
 from functools import wraps
+
+from django.http import HttpResponseForbidden
+
 from leave.permissions import Page, get_permissions_of_page
 from leave.utils import user_has_roles
+
 
 def role_required(page_enum: Page):
     def decorator(view_func):
