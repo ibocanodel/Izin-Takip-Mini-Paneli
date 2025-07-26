@@ -16,6 +16,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
+from django.shortcuts import render
 from django.urls import path
 
 from leave.views import admin as adminoops
@@ -61,3 +62,7 @@ urlpatterns = [
         "calisan/<int:pk>/duzenle/", employees.update_employee, name="update_employee"
     ),
 ]
+def custom_404_view(request, exception):
+    return render(request, "page_not_found.html", status=404)
+
+handler404 = "leave_panel.urls.custom_404_view"

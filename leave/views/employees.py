@@ -1,3 +1,4 @@
+from urllib.parse import urlencode
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404, redirect, render
@@ -6,6 +7,7 @@ from leave.decorators import role_required
 from leave.forms.user import CreateEmployeeForm, UpdateEmployeeForm
 from leave.models import AppSettings, Employee
 from leave.permissions import Page
+from django.core.paginator import Paginator
 
 PAGE_ENUM = Page.EMPLOYEES
 
@@ -34,8 +36,30 @@ def create_employee(request):
 
 @role_required(PAGE_ENUM)
 def employee_list(request):
-    employees = Employee.objects.filter(is_deleted=False)
-    return render(request, "employee/employee_list.html", {"employees": employees})
+    employees = Employee.objects.filter()
+    query_params = request.GET.copy()
+    page_number = request.GET.get("page")
+    page_size = request.GET.get("page_size", 10)
+    paginator = Paginator(employees, page_size)
+    page_obj = paginator.get_page(page_number)
+    page_size_options = [1,5, 10, 20, 50, 100]
+    query_params.pop("page", None)
+
+    try:
+        page_size = int(page_size)
+    except ValueError:
+        page_size = 10
+    return render(
+        request,
+        "employee/employee_list.html",
+        {
+            "employees": employees,
+            "page_obj": page_obj,
+            "query_string": urlencode(query_params),
+            "page_size": page_size,
+            "page_size_options": page_size_options,
+        },
+    )
 
 
 @role_required(PAGE_ENUM)

@@ -28,8 +28,7 @@
 
     <div class="col-md-2">
         <label>Başlangıç</label>
-        <input type="date" name="start_date" class="form-control"
-       value="{{ filters.start_date }}">
+        <input type="date" name="start_date" class="form-control" value="{{ filters.start_date }}">
     </div>
 
     <div class="col-md-2">
@@ -37,7 +36,16 @@
         <input type="date" name="end_date" class="form-control" value="{{ filters.end_date }}">
     </div>
 
-    <div class="col-md-2 d-flex align-items-end">
+    <div class="col-md-1">
+        <label>Kayıt/Sayfa</label>
+        <select name="page_size" class="form-select" onchange="this.form.submit()">
+            {% for size in page_size_options %}
+                <option value="{{ size }}" {% if page_size|stringformat:"s" == size|stringformat:"s" %}selected{% endif %}>{{ size }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-1 d-flex align-items-end">
         <button type="submit" class="btn btn-primary w-100">Filtrele</button>
     </div>
 </form>
@@ -55,9 +63,9 @@
         </tr>
     </thead>
     <tbody>
-        {% for leave in leaves %}
+        {% for leave in page_obj %}
         <tr>
-            <td>{{ forloop.counter }}</td>
+            <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
             <td>{{ leave.employee.name }}</td>
             <td>{{ leave.employee.department.name }}</td>
             <td>{{ leave.leave_type.name }}</td>
@@ -72,4 +80,32 @@
         {% endfor %}
     </tbody>
 </table>
+
+
+<nav>
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page=1&{{ query_string }}">İlk</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ query_string }}">«</a>
+      </li>
+    {% endif %}
+
+    <li class="page-item disabled">
+      <span class="page-link">Sayfa {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+    </li>
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ query_string }}">»</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&{{ query_string }}">Son</a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+
 {% endblock %}

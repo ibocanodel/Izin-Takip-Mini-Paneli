@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Sayfa Bulunamadı{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h1 class="display-4">Sayfa Bulunamadı</h1>
+    <p class="lead">Üzgünüz, bu sayfa mevcut değil veya kaldırılmış olabilir.</p>
+    <a href="{% url 'leave_list' %}" class="btn btn-outline-primary mt-3">Anasayfaya Dön</a>
+</div>
+{% endblock %}
