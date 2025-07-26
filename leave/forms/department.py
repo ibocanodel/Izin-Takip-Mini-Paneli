@@ -6,10 +6,10 @@ from leave.models import Department
 class DepartmentForm(forms.ModelForm):
     class Meta:
         model = Department
-        fields = ['name']
-    
+        fields = ["name"]
+
     def clean_name(self):
-        name = self.cleaned_data.get('name')
+        name = self.cleaned_data.get("name")
         qs = Department.objects.filter(name__iexact=name, is_deleted=False)
 
         if self.instance.pk:

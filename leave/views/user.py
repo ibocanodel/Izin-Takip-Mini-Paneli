@@ -8,27 +8,28 @@ from leave.models import Employee
 
 def user_login(request):
     from django.core.management import call_command
-    call_command('migrate') 
-    if request.method == 'POST':
+
+    call_command("migrate")
+    if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
             try:
-                employee = Employee.objects.get(email=form.cleaned_data['email'])
-                if employee.check_password(form.cleaned_data['password']):
-                    request.session['employee_id'] = employee.id
-                    return redirect('leave_list')
+                employee = Employee.objects.get(email=form.cleaned_data["email"])
+                if employee.check_password(form.cleaned_data["password"]):
+                    request.session["employee_id"] = employee.id
+                    return redirect("leave_list")
                 else:
                     messages.error(request, "Şifre hatalı.")
             except Employee.DoesNotExist:
                 messages.error(request, "Kullanıcı bulunamadı.")
     else:
         form = LoginForm()
-    return render(request, 'login.html', {'form': form})
+    return render(request, "login.html", {"form": form})
+
 
 def user_logout(request):
     logout(request)
-    return redirect('login')
-
+    return redirect("login")
 
 
 def my_profile(request):
@@ -48,7 +49,11 @@ def my_profile(request):
     else:
         form = ProfileUpdateForm(instance=employee)
 
-    return render(request, "my_profile.html", {
-        "form": form,
-        "employee": employee,
-    })
+    return render(
+        request,
+        "my_profile.html",
+        {
+            "form": form,
+            "employee": employee,
+        },
+    )

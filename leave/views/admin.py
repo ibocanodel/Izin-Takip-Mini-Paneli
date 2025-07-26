@@ -6,7 +6,7 @@ from leave.models import AppSettings
 
 
 def update_settings(request):
-    settings, _ = AppSettings.objects.get_or_create(pk=1) 
+    settings, _ = AppSettings.objects.get_or_create(pk=1)
 
     if request.method == "POST":
         form = AppSettingsForm(request.POST, instance=settings)

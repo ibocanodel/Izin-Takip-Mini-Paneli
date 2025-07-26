@@ -6,28 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('leave', '0005_alter_employee_role'),
+        ("leave", "0005_alter_employee_role"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='appsettings',
-            name='allow_exceed_total_leave_days',
+            model_name="appsettings",
+            name="allow_exceed_total_leave_days",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='appsettings',
-            name='allow_request_past_leaves',
+            model_name="appsettings",
+            name="allow_request_past_leaves",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='leavetype',
-            name='annual_leave_days',
+            model_name="leavetype",
+            name="annual_leave_days",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='leavetype',
-            name='count_on_total_days',
+            model_name="leavetype",
+            name="count_on_total_days",
             field=models.BooleanField(default=True),
         ),
     ]

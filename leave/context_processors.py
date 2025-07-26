@@ -13,5 +13,6 @@ def employee_context(request):
             pass
     return {"current_employee": None}
 
+
 def page_enums(request):
     return {"Page": Page}

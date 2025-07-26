@@ -8,7 +8,8 @@ class Role(IntEnum):
     ADMIN = 2
     SUPER_ADMIN = 3
 
+
 class Role_DB(models.IntegerChoices):
-    NORMAL_EMPLOYEE = 1, 
-    ADMIN = 2, 
-    SUPER_ADMIN = 3, 
+    NORMAL_EMPLOYEE = (1,)
+    ADMIN = (2,)
+    SUPER_ADMIN = (3,)

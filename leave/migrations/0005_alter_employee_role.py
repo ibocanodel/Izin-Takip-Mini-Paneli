@@ -6,13 +6,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('leave', '0004_appsettings'),
+        ("leave", "0004_appsettings"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='employee',
-            name='role',
-            field=models.IntegerField(choices=[(1, 'Normal Employee'), (2, 'Admin'), (3, 'Super Admin')], default=1),
+            model_name="employee",
+            name="role",
+            field=models.IntegerField(
+                choices=[(1, "Normal Employee"), (2, "Admin"), (3, "Super Admin")],
+                default=1,
+            ),
         ),
     ]

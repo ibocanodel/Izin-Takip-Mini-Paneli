@@ -1,4 +1,3 @@
-
 from functools import wraps
 
 from django.http import HttpResponseForbidden
@@ -15,5 +14,7 @@ def role_required(page_enum: Page):
             if not user_has_roles(request, roles):
                 return HttpResponseForbidden("Bu sayfayı görüntüleme yetkiniz yok.")
             return view_func(request, *args, **kwargs)
+
         return _wrapped_view
+
     return decorator

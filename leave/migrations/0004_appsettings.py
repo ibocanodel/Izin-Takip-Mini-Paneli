@@ -6,17 +6,35 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('leave', '0003_employee_work_start_date'),
+        ("leave", "0003_employee_work_start_date"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AppSettings',
+            name="AppSettings",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('default_password', models.CharField(default='test1234', max_length=100)),
-                ('annual_leave_days', models.PositiveIntegerField(default=14)),
-                ('work_days', models.CharField(default='1,2,3,4,5', help_text='Çalışma günlerini virgülle ayır (1=Ptsi, ..., 7=Pazar)', max_length=20)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "default_password",
+                    models.CharField(default="test1234", max_length=100),
+                ),
+                ("annual_leave_days", models.PositiveIntegerField(default=14)),
+                (
+                    "work_days",
+                    models.CharField(
+                        default="1,2,3,4,5",
+                        help_text="Çalışma günlerini virgülle ayır (1=Ptsi, ..., 7=Pazar)",
+                        max_length=20,
+                    ),
+                ),
             ],
         ),
     ]
