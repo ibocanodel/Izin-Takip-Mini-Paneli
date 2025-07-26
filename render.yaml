@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: your-django-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn leave.wsgi
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: leave.settings
+      - key: SECRET_KEY
+        generateValue: true

@@ -8,8 +8,8 @@ class Settonfig(AppConfig):
     def ready(self):
         from django.db.utils import OperationalError
 
-        from .models import AppSettings
+"""         from .models import AppSettings
         try:
             AppSettings.objects.get_or_create(pk=1)
         except OperationalError:
-            pass
+            pass """
